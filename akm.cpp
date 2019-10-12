@@ -3,9 +3,9 @@
 #include <vector>
 #include "akm.hpp"
 
-akm:: akm(std:: string &pattern): pf (s.length(), 0), table(s.length(), std:: vector <int> (256, -1)){
-    s = pattern;
-    std:: cout << s << endl << pf.length();
+akm:: akm(const std:: string &pattern):s (pattern),
+                                       pf (pattern.length(), 0),
+                                       table(pattern.length(),std:: vector <int> (256, -1)){
     pff();
     AKM();
 }
@@ -16,12 +16,10 @@ void akm:: AKM (){
     std:: fill(table[0].begin(),table[0].end(),0);
     table[0][(int)(s[0])] = 1;
 
-
     for(int q = 1; q < len; q++){
-
         for(int a = 0; a < 256; a++){
             if(a == (int)(s[q])) table[q][a] = q + 1;
-            else table[q][a] = table[pf[q]][a];
+            else table[q][a] = table[pf[q-1]][a];
         }
     }
 } 
@@ -38,11 +36,20 @@ void akm:: pff(){
 
 		pf[i] = k;
 	}
+	//for(int i = 0; i < pf.size(); i++) std:: cout << pf[i] << " ";
 }
 
-int main(){
-    std:: string l = "abbac";
+/*int main(){
+    const std:: string l = "abbac";
     akm A(l);
-    std:: cout <<A.table[0][(int)('a')];
+    std:: cout <<" automat table " << std:: endl;
+    for(int j = (int)('a'); j < (int)('z'); j++) std::cout << (char)(j) << " ";
+    std::cout<< std::endl;
+    for(int i = 0; i < A.table.size(); i++){
+        for(int j = (int)('a'); j < (int)('z'); j++){
+            std::cout << A.table[i][j] << " ";
+        }
+        std:: cout << std:: endl;
+    }
     return 0;
-}
+}*/

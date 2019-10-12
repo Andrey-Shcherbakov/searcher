@@ -1,12 +1,12 @@
 class akm{
     private:
-        std:: string s;//искомый кусок
+        const std:: string s;//искомый кусок
         std:: vector<int> pf;//префикс-функция
         
-        void pff ();
-        void AKM ();
+        void pff (); //подсчет префикс-функции
+        void AKM (); //подсчет таблицы переходов
     public:
-        akm(std:: string&);
+        akm(const std:: string&);
         std:: vector<std:: vector <int> > table;//автомат
 };
            
