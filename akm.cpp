@@ -1,13 +1,16 @@
-#include <iostream>
-#include <string>
-#include <vector>
+#pragma once
 #include "akm.hpp"
 
 akm:: akm(const std:: string &pattern):s (pattern),
                                        pf (pattern.length(), 0),
-                                       table(pattern.length(),std:: vector <int> (256, -1)){
+                                       table(pattern.length(),std:: vector <int> (256, 0)){
+    gotcha = s.length();
     pff();
     AKM();
+}
+
+int akm:: step(int q, char input) {
+    return table[q][(int) input];
 }
 
 void akm:: AKM (){
