@@ -3,15 +3,13 @@
 #include <string>
 #include <vector>
 #include "akm.hpp"
-struct result{
-    const char *name; //имя файла
-    int line; //номер строки
-    std::string zeile; //строка
-};
+#include "kmp.hpp"
 
 int kmp(const char *filename, akm &A, std:: vector <result> &r){
+    //std::cout << filename << std::endl;
     std::ifstream f;
     f.open(filename);
+
     std::string zeile;
     int line = 1, q = 0;
     result res;
@@ -28,6 +26,7 @@ int kmp(const char *filename, akm &A, std:: vector <result> &r){
             } else {
                 q = A.step(q, zeile[i]);
             }
+            //std:: cout << q << " " << (int)zeile[i] << std:: endl;
         }
         line++;
     }
@@ -35,9 +34,9 @@ int kmp(const char *filename, akm &A, std:: vector <result> &r){
     return 0;
 }
 
-int main(){
+/*int main(){
     const std:: string l = "abbac";
-    const char title[62] = "C:\\Users\\sherb\\OneDrive\\Desktop\\IT\\Searcher\\example.txt";
+    const char title[62] = "C:\\Users\\sherb\\OneDrive\\Desktop\\IT\\Searcher\\akm.hpp";
     akm A(l);
     std:: vector <result> r;
     kmp(title, A, r);
@@ -45,4 +44,4 @@ int main(){
         std:: cout << r[i].line  << " " << r[i].zeile << std:: endl;
     }
     return 0;
-}
+}*/

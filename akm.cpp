@@ -1,4 +1,3 @@
-#pragma once
 #include "akm.hpp"
 
 akm:: akm(const std:: string &pattern):s (pattern),
