@@ -12,15 +12,18 @@ int kmp(const char *filename, akm &A, std:: vector <result> &r){
 
     std::string zeile;
     int line = 1, q = 0;
-    result res;
-    res.name = filename;
     while(std::getline(f, zeile)){
         //std:: cout << line  << zeile << std::endl;
+
+        result res;
+        res.name = (std::string)filename;
+
         for(int i = 0;  i < zeile.length(); i++){
             if (q == A.gotcha) {
                 res.line = line;
                 res.zeile = zeile;
                 r.push_back(res);
+                //if(r.size() > 1) std:: cout << r[r.size()-2].name << std::endl;
                 q=0;
                 break;
             } else {
