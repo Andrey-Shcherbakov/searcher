@@ -31,16 +31,42 @@ int kmp(std::string filename, akm &A, pthread_mutex_t &print){
     return 0;
 }
 
-void *Dive (void *args){
-    Divedata *a = (Divedata *)args;
+void Deep(std::string directory, drehen &D){
     DIR *dir;
-    struct  dirent *ent;
+    dir = opendir(directory.c_str());
+    if (dir == NULL) {
+        std::cout <<"here " << directory << "\n";
+        perror("opendir");
+        return;
+    }
+    //std:: cout << "here we go again\n";
+    for (auto ent = readdir(dir); ent != NULL; ent = readdir(dir)){
+        std::string en = (std::string) (ent->d_name);
+        if (en != "." && en != "..") {
+            std::string hel = directory + (char)(47) + en;
+		    if(ent->d_type == DT_REG) D.dpush(hel);
+            if(ent->d_type == DT_DIR) Deep(hel, D);
+		}
+    }
+    closedir(dir);
+}
+
+void *Dive (void *args){
+    //return nullptr;
+    Divedata *a = (Divedata *)args;
     //std:: cout << &(a->D) << " \n";
     if(!(a->depth)){
+        DIR *dir;
+        struct  dirent *ent;
         dir = opendir((a->adr).c_str());
+        if (dir == NULL) {
+            perror("opendir");
+            return nullptr;
+        }
+
         while ((ent = readdir(dir)) != nullptr) {
             if (ent->d_name[0] != '.') {
-                std::string hel = (a->adr) + (char) (92) +
+                std::string hel = (a->adr) + (char)(47) +
                                   (std::string)(ent->d_name);//needs changing in linux on 47, windows - 92
                 (a->D).dpush(hel);
             }
@@ -48,31 +74,7 @@ void *Dive (void *args){
         closedir(dir);
     }
     else {
-        std::queue<std::string> dirs;
-        dirs.push(a->adr);
-        while (!(dirs.empty())) {
-            std::string fn = dirs.front();
-            dir = opendir((dirs.front()).c_str());
-            dirs.pop();
-            while ((ent = readdir(dir)) != nullptr) {
-                if (ent->d_name[0] != '.') {
-                    std::string hel = (fn) + (char) (92) +
-                                      (std::string) (ent->d_name);//needs changing in linux on 47, windows - 92
-                    //std::cout << hel << " may\n";
-                    (a->D).dpush(hel);
-
-                } else {
-                    std::string en = (std::string) (ent->d_name);
-                    if (en != "." && en != "..") {
-                        en.erase(en.begin());
-                        std::string hel = (fn) + (char) (92) + en;
-                        //std:: cout  << hel <<" lost dirs\n";
-                        dirs.push(hel);
-                    }
-                }
-            }
-            closedir(dir);
-        }
+        Deep(a->adr, a->D);
     }
     (a->D).finished = true;
     while(!(a->D).empty){
@@ -106,7 +108,7 @@ int main(int argc, char *argv[]){
     parcer P(argc, argv);
     akm A(P.l);
 
-    //std:: cout << P.depth;
+    //std:: cout << P.dir;
 
     std::vector <pthread_t> thr(P.tN);
     pthread_mutex_t mut;
