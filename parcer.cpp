@@ -4,13 +4,13 @@
 parcer:: parcer(int argc, char *argv[]){
     if(argc > 1) {
         tN = 1;
-        depth = 1;
+        depth = true;
         int tracker = 0;
         for (int i = 0; i < argc; i++) {
             switch (argv[i][0]) {
                 case '-': {
                     if (argv[i][1] == 'n') {
-                        depth = 0;
+                        depth = false;
                         break;
                     }
                     else {
@@ -32,7 +32,7 @@ parcer:: parcer(int argc, char *argv[]){
                     getcwd(cwd, sizeof(cwd));
                     std::string help = (std::string) argv[i];
                     help.erase(help.begin());
-                    dir = (std::string) cwd + help;
+                    dir = (std::string) cwd + (char)(92)+ help;
                     tracker = 1;
                     break;
                 }

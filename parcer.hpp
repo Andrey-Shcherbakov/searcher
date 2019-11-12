@@ -5,7 +5,7 @@ class parcer{
 public:
     parcer(int argc, char *argv[]);
     int tN;
-    std::string l;
-    int depth;
+    std::string l; //pattern
+    bool depth;
     std::string dir;
 };
