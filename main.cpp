@@ -125,4 +125,5 @@ int main(int argc, char *argv[]){
         pthread_join(thr[i], nullptr);
     }
     return 0;
+    //here we go
 }
