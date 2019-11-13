@@ -1,4 +1,5 @@
 #include "akm.hpp"
+#include <assert.h>
 
 akm:: akm(const std:: string &pattern):s (pattern),
                                        pf (pattern.length(), 0),
@@ -9,7 +10,9 @@ akm:: akm(const std:: string &pattern):s (pattern),
 }
 
 int akm:: step(int q, char input) {
-    return table[q][(int) input];
+    assert((int)((unsigned char) input) < 256 && (int)((unsigned char) input) > 0);
+    assert(q > 0 && q <= s.length());
+    return table[q][(int)((unsigned char) input)];
 }
 
 void akm:: AKM (){
@@ -19,8 +22,8 @@ void akm:: AKM (){
     table[0][(int)(s[0])] = 1;
 
     for(int q = 1; q < len; q++){
-        for(int a = 0; a < 256; a++){
-            if(a == (int)(s[q])) table[q][a] = q + 1;
+        for(int a = 0; a < 256; a++){ //may appear problems with range
+            if(a == (int)((unsigned char)s[q])) table[q][a] = q + 1;
             else table[q][a] = table[pf[q-1]][a];
         }
     }
@@ -36,22 +39,7 @@ void akm:: pff(){
 		if (s[i] == s[k])
 			k++;
 
+		assert(k < s.length() && k > 0);
 		pf[i] = k;
 	}
-	//for(int i = 0; i < pf.size(); i++) std:: cout << pf[i] << " ";
 }
-
-/*int main(){
-    const std:: string l = "abbac";
-    akm A(l);
-    std:: cout <<" automat table " << std:: endl;
-    for(int j = (int)('a'); j < (int)('z'); j++) std::cout << (char)(j) << " ";
-    std::cout<< std::endl;
-    for(int i = 0; i < A.table.size(); i++){
-        for(int j = (int)('a'); j < (int)('z'); j++){
-            std::cout << A.table[i][j] << " ";
-        }
-        std:: cout << std:: endl;
-    }
-    return 0;
-}*/

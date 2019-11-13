@@ -8,7 +8,6 @@ drehen:: drehen(pthread_mutex_t &mt): mut (mt){
 void drehen::dpush(std::string &fname){
     pthread_mutex_lock(&mut);
     store.push(fname);
-    //std:: cout << store.back() << std::endl;
     empty = false;
     pthread_mutex_unlock(&mut);
 }

@@ -6,14 +6,11 @@
 #include "queues.hpp"
 
 int kmp(std::string filename, akm &A, pthread_mutex_t &print){
-    //std::cout << filename << std::endl;
     std::ifstream f;
     f.open(filename.c_str());
-
     std::string zeile;
     int line = 1, q = 0;
     while(std::getline(f, zeile)){
-
         for(int i = 0;  i < zeile.length(); i++){
             if (q == A.gotcha) {
                 pthread_mutex_lock(&print);
@@ -21,7 +18,8 @@ int kmp(std::string filename, akm &A, pthread_mutex_t &print){
                 pthread_mutex_unlock(&print);
                 q=0;
                 break;
-            } else {
+            }
+            else {
                 q = A.step(q, zeile[i]);
             }
         }
@@ -39,7 +37,6 @@ void Deep(std::string directory, drehen &D){
         perror("opendir");
         return;
     }
-    //std:: cout << "here we go again\n";
     for (auto ent = readdir(dir); ent != NULL; ent = readdir(dir)){
         std::string en = (std::string) (ent->d_name);
         if (en != "." && en != "..") {
@@ -52,23 +49,20 @@ void Deep(std::string directory, drehen &D){
 }
 
 void *Dive (void *args){
-    //return nullptr;
     Divedata *a = (Divedata *)args;
-    //std:: cout << &(a->D) << " \n";
     if(!(a->depth)){
         DIR *dir;
-        struct  dirent *ent;
-        dir = opendir((a->adr).c_str());
+        dir = opendir(a->adr.c_str());
         if (dir == NULL) {
+            std::cout <<"here " << a->adr << "\n";
             perror("opendir");
             return nullptr;
         }
-
-        while ((ent = readdir(dir)) != nullptr) {
-            if (ent->d_name[0] != '.') {
-                std::string hel = (a->adr) + (char)(47) +
-                                  (std::string)(ent->d_name);//needs changing in linux on 47, windows - 92
-                (a->D).dpush(hel);
+        for (auto ent = readdir(dir); ent != NULL; ent = readdir(dir)){
+            std::string en = (std::string) (ent->d_name);
+            if (en != "." && en != "..") {
+                std::string hel = a->adr + (char)(47) + en;
+                if(ent->d_type == DT_REG) (a->D).dpush(hel);
             }
         }
         closedir(dir);
